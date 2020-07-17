@@ -1,13 +1,20 @@
-const sharp = require('sharp');
+const { argv } = require('yargs');
 const fs = require('fs');
 const path = require('path');
 const _ = require('underscore');
 const async = require('async');
+const sharp = require('sharp');
+const utils = require('./utils');
 
-const directoryPath = path.join(__dirname, 'images');
-const outputPath = path.join(__dirname, 'output');
-const stdWidth = 1280, stdHeight = 853;
+// Initialize variables and Read argument variables
+var directoryPath = _.isUndefined(argv.src) ? path.join(__dirname, 'images') : argv.src,
+    outputPath = _.isUndefined(argv.out) ? path.join(__dirname, 'output') : argv.out,
+    stdSize = _.isUndefined(argv.size) ? 1280 : parseInt(argv.size),
+    stdQuality = _.isUndefined(argv.quality) ? 80 : parseInt(argv.quality);
 
+if (!fs.existsSync(outputPath)) {
+    fs.mkdirSync(outputPath)
+}
 
 // Get list of files in `images` folder
 fs.readdir(directoryPath, function (err, files) {
@@ -18,17 +25,51 @@ fs.readdir(directoryPath, function (err, files) {
 
     files = _.reject(files, (file) => { return file == ".DS_Store" })
 
+    // Resize and Compress images
     async.each(files, (file, callback) => {
-        sharp(`${directoryPath}/${file}`)
-            .resize(stdWidth, stdHeight)
-            .toFile(`${outputPath}/${file}`, (err, info) => {
-                if (err) {
-                    callback(err)
+        console.log(`🛠 Optimizing file ${file} . . . `);
+
+        let image = sharp(`${directoryPath}/${file}`);
+        image
+            .metadata()
+            .then((metadata) => {
+                if (metadata.width < metadata.height) {
+                    image
+                        .resize({ height: stdSize })
+                        .sharpen()
+                        .jpeg({
+                            quality: stdQuality,
+                            optimizeCoding: true
+                        })
+                        .withMetadata()
+                        .toFile(`${outputPath}/PM_${file.replace("DUA_", "").toLowerCase()}`, (err, info) => {
+                            if (err) {
+                                callback(err)
+                            } else {
+                                utils.log(directoryPath, outputPath, file)
+                                callback()
+                            }
+                        });
                 } else {
-                    console.log(`--> Optimized ${file}`);
-                    callback()
+                    image
+                        .resize({ width: stdSize })
+                        .sharpen()
+                        .jpeg({
+                            quality: stdQuality,
+                            optimizeCoding: true
+                        })
+                        .withMetadata()
+                        .toFile(`${outputPath}/PM_${file.replace("DUA_", "").toLowerCase()}`, (err, info) => {
+                            if (err) {
+                                callback(err)
+                            } else {
+                                utils.log(directoryPath, outputPath, file)
+                                callback()
+                            }
+                        });
                 }
-            });
+            })
+
     }, (error) => {
         // if any of the file processing produced an error, err would equal that error
         if (err) {
