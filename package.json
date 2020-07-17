@@ -1,0 +1,30 @@
+{
+  "name": "photo-optimize",
+  "version": "1.0.0",
+  "description": "",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://gitlab.com/dthphuong1/photo-optimize.git"
+  },
+  "keywords": [
+    "compress",
+    "compressor",
+    "optimize",
+    "resize"
+  ],
+  "author": "Phuong Duong",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://gitlab.com/dthphuong1/photo-optimize/issues"
+  },
+  "homepage": "https://gitlab.com/dthphuong1/photo-optimize#readme",
+  "dependencies": {
+    "async": "^3.2.0",
+    "sharp": "^0.25.4",
+    "underscore": "^1.10.2"
+  }
+}
