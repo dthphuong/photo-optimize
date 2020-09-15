@@ -9,6 +9,7 @@ const utils = require('./utils');
 // Initialize variables and Read argument variables
 var directoryPath = _.isUndefined(argv.src) ? path.join(__dirname, 'images') : argv.src,
     outputPath = _.isUndefined(argv.out) ? path.join(__dirname, 'output') : argv.out,
+    sigma = _.isUndefined(argv.sigma) ? 0 : parseFloat(argv.sigma),
     stdSize = _.isUndefined(argv.size) ? 1280 : parseInt(argv.size),
     stdQuality = _.isUndefined(argv.quality) ? 80 : parseInt(argv.quality);
 
@@ -37,6 +38,7 @@ fs.readdir(directoryPath, function (err, files) {
                     image
                         .resize({ height: stdSize })
                         .sharpen()
+                        // .blur(sigma)
                         .jpeg({
                             quality: stdQuality,
                             optimizeCoding: true
@@ -54,6 +56,7 @@ fs.readdir(directoryPath, function (err, files) {
                     image
                         .resize({ width: stdSize })
                         .sharpen()
+                        // .blur(sigma)
                         .jpeg({
                             quality: stdQuality,
                             optimizeCoding: true
