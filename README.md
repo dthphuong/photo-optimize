@@ -7,7 +7,7 @@ Developed by [Phuong Duong](https://phuongduong.fpo.vn/)
 
 ## Installation
 1. Install Node.JS: Download and Install [here](https://nodejs.org/en/download/)
-2. Clone this project: 
+2. Open Terminal or iTerm and clone this project: 
 ```
 git clone https://gitlab.com/dthphuong1/photo-optimize.git
 ```
