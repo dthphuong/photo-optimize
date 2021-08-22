@@ -30,4 +30,5 @@ node main.js --size 1280 --quality 80
 ```
 
 Ps1. You can change `size` and `quality` in above command
+
 Ps2. The output (resize and compress) photos are in `output` folder
